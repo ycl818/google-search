@@ -10,8 +10,14 @@ export const Results = () => {
   const location = useLocation(); // images, news, videos
 
   useEffect(() => {
-    getResults("/search/q=elon musk&num=10");
-  }, []);
+    if (searchTerm) {
+      if (location.pathname === "./videos") {
+        getResults(`/search/q=${searchTerm} videos`);
+      } else {
+        getResults(`${location.pathname}/q=${searchTerm}&num=10`);
+      }
+    }
+  }, [searchTerm, location.pathname]);
 
   if (isLoading) return `${(<Loading />)}`;
 
@@ -34,7 +40,18 @@ export const Results = () => {
         </div>
       );
     case "/images":
-      return "SEARCH";
+      return (
+        <div className="flex flex-wrap justify-center items-center">
+          {results?.image_results?.map(
+            ({ image, link: { href, title } }, index) => (
+              <a className="sm:p-3 p-5" href={href} key={index} target="_blank">
+                <img src={image?.src} alt={title} loading="lazy" />
+                <p className="w-36 break-words text-sm mt-2">{title}</p>
+              </a>
+            )
+          )}
+        </div>
+      );
     case "/news":
       return "SEARCH";
     case "/videos":
