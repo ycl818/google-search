@@ -5,6 +5,10 @@ import ReactPlayer from "react-player";
 import { useResultContext } from "../contexts/ResultContextProvider";
 import { Loading } from "./Loading";
 
+function truncate(str, n) {
+  return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+}
+
 export const Results = () => {
   const { results, isLoading, getResults, searchTerm } = useResultContext();
   const location = useLocation(); // images, news, videos
@@ -19,14 +23,15 @@ export const Results = () => {
     }
   }, [searchTerm, location.pathname]);
 
-  if (isLoading) return `${(<Loading />)}`;
+  if (isLoading) return <Loading />;
 
   switch (location.pathname) {
     case "/search":
       return (
         <div className="flex flex-wrap justify-between space-y-6 sm:px-56">
-          {results?.map(({ link, title }, index) => (
+          {results?.map(({ link, title, description }, index) => (
             <div key={index} className="md:w-2/5 w-full">
+              {console.log(results)}
               <a href={link} target="_blank" rel="noreferrer">
                 <p className="text-sm">
                   {link.length > 30 ? link.substring(0, 30) : link}
@@ -34,6 +39,7 @@ export const Results = () => {
                 <p className="text-lg hover:underline dark:text-blue-300 text-blue-700">
                   {title}
                 </p>
+                <p>{truncate(description, 150)}</p>
               </a>
             </div>
           ))}
@@ -85,13 +91,15 @@ export const Results = () => {
         <div className="flex flex-wrap">
           {results.map((video, index) => (
             <div key={index} className="p-2">
-              {console.log(video)}
-              <ReactPlayer
-                url={video.additional_links?.[0].href}
-                controls
-                width="350px"
-                height="200px"
-              />
+              {video?.additional_links?.[0]?.href && (
+                <ReactPlayer
+                  url={video.additional_links?.[0].href}
+                  controls
+                  width="350px"
+                  height="200px"
+                />
+              )}
+              {video.title}
             </div>
           ))}
         </div>
