@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useDebugValue, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ReactPlayer from "react-player";
 
@@ -11,7 +11,7 @@ export const Results = () => {
 
   useEffect(() => {
     if (searchTerm) {
-      if (location.pathname === "./videos") {
+      if (location.pathname == "/videos") {
         getResults(`/search/q=${searchTerm} videos`);
       } else {
         getResults(`${location.pathname}/q=${searchTerm}&num=10`);
@@ -70,18 +70,32 @@ export const Results = () => {
                 <p className="text-lg  dark:text-blue-300 text-blue-700">
                   {title}
                 </p>
-                <div className="flex gap-4">
-                  <a href={source?.href} target="_blank" rel="noreferrer">
-                    {source?.href}
-                  </a>
-                </div>
               </a>
+              <div className="flex gap-4">
+                <a href={source?.href} target="_blank" rel="noreferrer">
+                  {source?.href}
+                </a>
+              </div>
             </div>
           ))}
         </div>
       );
     case "/videos":
-      return "SEARCH";
+      return (
+        <div className="flex flex-wrap">
+          {results.map((video, index) => (
+            <div key={index} className="p-2">
+              {console.log(video)}
+              <ReactPlayer
+                url={video.additional_links?.[0].href}
+                controls
+                width="350px"
+                height="200px"
+              />
+            </div>
+          ))}
+        </div>
+      );
     default:
       return "ERROR";
   }
