@@ -8,6 +8,9 @@ Mimic a search engine that is able to search for information, news, pictures, an
 
 ![](https://github.com/ycl818/google-search/blob/master/public/20220201.gif)
 ![](https://github.com/ycl818/google-search/blob/master/public/20220201-2.gif)
+
+## Mobile Friendly
+![](https://github.com/ycl818/google-search/blob/master/public/20220201-3.gif)
 ## Feature
 
 * Integrated Google search API to show assigned quantity of data each time based on the search query information 
